@@ -1,0 +1,5 @@
+lordfast=Index++cp::ref.fa::GenomeIndexPath/Genome.fa++lordfast::--index::GenomeIndexPath/Genome.fa
+LAST=Index++cp::ref.fa::GenomeIndexPath/Genome.fa++/home/lz/software/align_tools/last-1080/bin/lastdb::-P::10::-v::GenomeIndexPath/Genome.lastdb::ref.fa::2>&1::|tee::GenomeIndexPath/Genome.lastdb.log++samtools::dict::GenomeIndexPath/Genome.fa::-o::GenomeIndexPath/Genome.seq.dict
+BWA-MEM=Index++cp::ref.fa::GenomeIndexPath/Genome.fa++bwa::index::GenomeIndexPath/Genome.fa
+minialign=Index++cp::ref.fa::GenomeIndexPath/Genome.fa++minialign::-d::GenomeIndexPath/Genome.mai::GenomeIndexPath/Genome.fa
+Other=Index++cp::ref.fa::GenomeIndexPath/Genome.fa

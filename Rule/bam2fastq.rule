@@ -1,0 +1,2 @@
+Nanopore=simulation++samtools::fastq::-@::20::simulation.bam::>sample.fq.tmp++python::/home/lz/Data_sequence/2021_4_2/work/Pacbio/fastq_stdin.py::sample.fq.tmp::>sample.fq++rm::sample.fq.tmp
+Pacbio=simulation++samtools::fastq::-@::20::simulation.bam::>sample.fq.tmp++python::/home/lz/Data_sequence/2021_4_2/work/Pacbio/fastq_stdin.py::sample.fq.tmp::>sample.fq++rm::sample.fq.tmp
