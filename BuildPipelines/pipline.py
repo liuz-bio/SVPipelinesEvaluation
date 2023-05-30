@@ -4,10 +4,10 @@ import sys
 Platforms = ['Nanopore',"Pacbio"]
 
 #"pbmm2" "blasr"
-Map_tools = {'Nanopore':["pbmm2","ngmlr","minialign","minimap2","winnowmap",'lordfast','LAST','graphmap','BWA-MEM'],
-             'Pacbio':["pbmm2","lordfast","ngmlr","minialign","minimap2","winnowmap",'LAST','graphmap','BWA-MEM']}
+Map_tools = {'Nanopore':["pbmm2","ngmlr","minimap2","winnowmap",'lordfast'],
+             'Pacbio':["pbmm2","lordfast","ngmlr","minimap2","winnowmap"]}
 
-Map_index ={'Other':'/home/lz/Data_sequence/Ref/Other','lordfast':'/home/lz/Data_sequence/Ref/lordfast','LAST':'/home/lz/Data_sequence/Ref/LAST','BWA-MEM':'/home/lz/Data_sequence/Ref/BWA-MEM','minialign':'/home/lz/Data_sequence/Ref/minialign'}
+Map_index ={'Other':'/home/lz/Data_sequence/Ref/Other','lordfast':'/home/lz/Data_sequence/Ref/lordfast'}
 
 type_steps = ['bam','vcf']
 
@@ -19,12 +19,7 @@ for i in open('Sample.tab','r'):
     i=i.strip().split('\t')
     Samples[i[0]][i[1]]=i[2]
 
-'''
-Samples = {'Nanopore':{'nanopore_del_5x':'/home/lz/Data_sequence/2021_4_2/visortest/simulation/nanopore_del_5x/sim.srt.bam',
-                       'nanopore_ins_5x':'/home/lz/Data_sequence/2021_4_2/work/Pacbio/nanopore_ins_5x.fq'},
-           'Pacbio':{'pacbio_del_5x':'/home/lz/Data_sequence/2021_4_2/visortest/simulation/pacbio_del_5x/sim.srt.bam',
-                      'pacbio_ins_5x':'/home/lz/Data_sequence/2021_4_2/work/Pacbio/pacbio_ins_5x.fq'}}
-'''
+
 
 rule_info = {'sampleId':None,'ref.fa':'/home/lz/Data_sequence/Ref/hs37d5.fa','sample.fq':None,'ThreadNumber':20,'SReads':2,'SvLength':30}
 

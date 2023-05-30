@@ -1,0 +1,1 @@
+cat bed.info|sed 's/\t/:/g'|while read id;do(i=(${id//:/ });cat ${i[2]}|grep -v \#|cut -f 1,2,8|sed 's/SUPP.*;END=//g'|cut -d\; -f1|awk -v OFS='\t' '{print $1,$2-500,$3+500}'|vcf-sort|python work.py > bed/${i[0]}.${i[1]}.bed);done
