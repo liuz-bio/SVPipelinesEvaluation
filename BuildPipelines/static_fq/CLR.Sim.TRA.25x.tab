@@ -1,0 +1,2 @@
+file                                                                                 format  type   num_seqs         sum_len  min_len   avg_len  max_len     Q1      Q2      Q3  sum_gap     N50  Q20(%)  Q30(%)  AvgQual  GC(%)
+/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/CLR_VISOR_LASeR_Sim_TRA.fq.gz  FASTQ   DNA   5,148,575  77,213,700,807        1  14,997.1  197,490  5,562  11,449  20,641        0  22,617   94.08   90.41    19.68  39.74

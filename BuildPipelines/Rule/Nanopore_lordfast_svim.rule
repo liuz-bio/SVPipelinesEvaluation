@@ -1,1 +1,0 @@
-Nanopore=lordfast=svim++ln::-s::bamPath/sampleId.sort.bam::bamPath/sampleId.svTools.sort.bam++ln::-s::bamPath/sampleId.sort.bam.bai::bamPath/sampleId.svTools.sort.bam.bai++/home/lz/anaconda3/bin/svim::alignment::--minimum_depth::SReads::--min_sv_size::SvLength::outPath/sampleId/sampleId::bamPath/sampleId.svTools.sort.bam::GenomeIndexPath/Genome.fa

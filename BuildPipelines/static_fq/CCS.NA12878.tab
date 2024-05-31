@@ -1,0 +1,2 @@
+file                                                                       format  type   num_seqs         sum_len  min_len  avg_len  max_len     Q1     Q2      Q3  sum_gap     N50  Q20(%)  Q30(%)  AvgQual  GC(%)
+/home/lz/Data_sequence/2023_11_14/fastq/NA12878/CCS/NA12878.25x.CCS.fq.gz  FASTQ   DNA   7,870,979  78,420,585,607      101  9,963.3   21,348  9,619  9,974  10,346        0  10,004   98.52   96.53    27.53  41.33

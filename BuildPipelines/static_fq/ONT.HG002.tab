@@ -1,0 +1,2 @@
+file                                                                   format  type   num_seqs         sum_len  min_len  avg_len  max_len  Q1   Q2     Q3  sum_gap     N50  Q20(%)  Q30(%)  AvgQual  GC(%)
+/home/lz/Data_sequence/2023_11_14/fastq/HG002/ONT/HG002.25x.ONT.fq.gz  FASTQ   DNA   9,688,280  78,446,584,607        3  8,097.1  883,235  49  458  5,423        0  48,378   53.38   37.05     8.27  40.02

@@ -1,1 +1,0 @@
-Pacbio=graphmap=nanovar++ln::-s::bamPath/sampleId.sort.bam::bamPath/sampleId.svTools.sort.bam++ln::-s::bamPath/sampleId.sort.bam.bai::bamPath/sampleId.svTools.sort.bam.bai++nanovar::-x::pacbio-clr::-c::SReads::-t::ThreadNumber::-l::SvLength::bamPath/sampleId.svTools.sort.bam::GenomeIndexPath/Genome.fa::outPath/sampleId/sampleId

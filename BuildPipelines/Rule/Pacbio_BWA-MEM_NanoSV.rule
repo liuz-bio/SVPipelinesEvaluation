@@ -1,1 +1,0 @@
-Pacbio=BWA-MEM=NanoSV++ln::-s::bamPath/sampleId.sort.bam::bamPath/sampleId.svTools.sort.bam++ln::-s::bamPath/sampleId.sort.bam.bai::bamPath/sampleId.svTools.sort.bam.bai++/home/lz/anaconda3/bin/NanoSV::-t::ThreadNumber::-b::/home/lz/Data_sequence/Ref/hs37d5.bed::-o::outPath/sampleId.vcf::bamPath/sampleId.svTools.sort.bam

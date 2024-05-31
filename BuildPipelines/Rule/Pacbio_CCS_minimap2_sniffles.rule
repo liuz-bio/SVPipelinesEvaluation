@@ -1,0 +1,1 @@
+Pacbio=CCS=minimap2=sniffles++ln::-s::bamPath/sampleId.sort.bam::bamPath/sampleId.svTools.sort.bam++ln::-s::bamPath/sampleId.sort.bam.bai::bamPath/sampleId.svTools.sort.bam.bai++/home/lz/miniconda3/bin/sniffles::-s::SReads::-l::SvLength::-t::ThreadNumber::-m::bamPath/sampleId.svTools.sort.bam::-v::outPath/sampleId.vcf

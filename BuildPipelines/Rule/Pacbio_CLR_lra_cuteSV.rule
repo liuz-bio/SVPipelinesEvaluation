@@ -1,0 +1,2 @@
+Pacbio=CLR=lra=cuteSV++ln::-s::bamPath/sampleId.sort.bam::bamPath/sampleId.svTools.sort.bam++ln::-s::bamPath/sampleId.sort.bam.bai::bamPath/sampleId.svTools.sort.bam.bai++/home/lz/miniconda3/envs/cutesv1/bin/cuteSV::--genotype::--max_cluster_bias_INS::100::--diff_ratio_merging_INS::0.3::--max_cluster_bias_DEL::200::--diff_ratio_merging_DEL::0.5::-t::ThreadNumber::-s::SReads::-l::SvLength::bamPath/sampleId.svTools.sort.bam::GenomeIndexPath/genome.fa::outPath/sampleId.vcf::outPath
+

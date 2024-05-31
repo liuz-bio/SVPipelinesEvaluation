@@ -1,2 +1,2 @@
 cat Rule/*.rule >Rules.txt
-python pipline.py Rules.txt
+python PL.py Rules.txt

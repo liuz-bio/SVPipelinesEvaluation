@@ -1,0 +1,8 @@
+Nanopore	ONT_R10.4	Sim.DEL.INS.DUP.INV.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/ONT_R10.4_VISOR_LASeR_Sim_DEL.DUP.INS.INV.fq.gz
+Nanopore	ONT_R9.4	Sim.DEL.INS.DUP.INV.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/ONT_R9.4_VISOR_LASeR_Sim_DEL.DUP.INS.INV.fq.gz
+Nanopore	ONT_R10.4	Sim.TRA.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/ONT_R10.4_VISOR_LASeR_Sim_TRA.fq.gz
+Nanopore	ONT_R9.4	Sim.TRA.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/ONT_R9.4_VISOR_LASeR_Sim_TRA.fq.gz
+Pacbio	CLR	Sim.DEL.INS.DUP.INV.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/CLR_VISOR_LASeR_Sim_DEL.DUP.INS.INV.fq.gz
+Pacbio	CCS	Sim.DEL.INS.DUP.INV.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/CCS_VISOR_LASeR_Sim_DEL.DUP.INS.INV.fq.gz
+Pacbio	CLR	Sim.TRA.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/CLR_VISOR_LASeR_Sim_TRA.fq.gz
+Pacbio	CCS	Sim.TRA.25x	25x	/public3/SVDataset_lz/backup/2023_11_14/Sim/bed/fastq/CCS_VISOR_LASeR_Sim_TRA.fq.gz
