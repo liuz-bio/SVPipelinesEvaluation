@@ -84,7 +84,9 @@ Pipelines/
 ### Analysis of pipelines SVs detection results
 
 ```shell
-cd SV_sim/sim_real
+cd SV_sim
+python main.py
+cd sim_real
 python main.py
 # readInfo： function standardizes the SV test results of all pipelines. 
 # readSim： builds the Vcf file as the benchmark based on the bed file of the simulation data. 
