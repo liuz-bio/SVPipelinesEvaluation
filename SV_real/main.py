@@ -109,11 +109,11 @@ def readInfo(InfoName):
         for RE_nu in range(2,21):
             outFile = os.path.join("CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu), vcfFileName)
             os.makedirs(os.path.join("CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu)), exist_ok=True) 
-            pool.apply_async(func=LogExceptions(funcSim), args=(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux,))   #维持执行的进程总数为processes，当一个进程执行完毕后会添加新的进程进去
+            pool.apply_async(func=LogExceptions(funcSim), args=(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux,))   
             nux+=1
     print("Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~")
     pool.close()
-    pool.join()   #调用join之前，先调用close函数，否则会出错。执行完close后不会有新的进程加入到pool,join函数等待所有子进程结束
+    pool.join()  
     print("Sub-process(es) done.")
 """
         if svTool =='pbsv':
