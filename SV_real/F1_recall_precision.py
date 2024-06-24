@@ -1,10 +1,11 @@
 import os
 import sys
 
-samples = ["HG002"]
+samples = ['CHM13','HG00096','HG002','HG003','HG004','HG005','HG00512','HG006','HG007','NA12878']
 #resultDict = {plat:{pipline:{svtype:{depth:{RE:{}}}}}}
 resultDict = {}
-for line in os.popen("cat three.all.vcf.info|cut -f 1,2,3,4,5|grep -v TRA").read().strip().split("\n"):
+for line in os.popen("cat three.all.vcf.info three.all.vcf.info.DUP_INS|cut -f 1,2,3,4,5").read().strip().split("\n"):
+#for line in os.popen("cat three.all.test|cut -f 1,2,3,4,5|grep -v TRA").read().strip().split("\n"):
     line = line.strip().split('\t')
     #print(line) Nanopore        HG003.10        DEL     minimap2        cutesv
     plat = line[0]
@@ -12,15 +13,31 @@ for line in os.popen("cat three.all.vcf.info|cut -f 1,2,3,4,5|grep -v TRA").read
     maps = line[3]
     svtype = line[2]
     depth = line[1]
+    if svtype == "TRA":
+        svtype = "BND"
     pipline = maps+'-'+call
     for sa in samples:
         #sams = sa+'.'+depth+'x' EvalOutFile/Nanopore/minimap2/cutesv/DEL/HG004.25/2/HG004.25x/
-        sams = depth+'x'
+        #sams = depth+'x'
+        sams = sa+'.'+depth
         F1Dict = dict(zip(range(2,21),["0" for i in range(2,21)]))
         RecallDict = F1Dict.copy()
         precisionDict = F1Dict.copy()
+         
+        if (plat == 'ONT') and  (sa not in ['CHM13','HG00096','HG002','HG003','HG004','HG00512','NA12878']):
+            continue
+        if (plat  == 'CCS') and  (sa not in ['CHM13','HG00096','HG002','HG003','HG004','HG005','HG00512','HG006','HG007','NA12878']):
+            continue
+        if (plat == 'CLR') and  (sa not in ['CHM13','HG002','HG003','HG004','HG005','HG00512','HG006','HG007']):
+            continue
+        if (maps == 'lra') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','sniffles2','svim','svision']):
+            continue
+        if (maps == 'pbmm2') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','nanosv','pbsv','picky','sniffles','sniffles2','svim','svision']):
+            continue
+
         for idx in range(2,21):
             path = "/".join(["EvalOutFile",plat,maps,call,svtype,depth,str(idx),sams,"summary.txt"])
+       
             #print(path)
             if os.path.exists(path) :
                 for lx in open(path,'r'):

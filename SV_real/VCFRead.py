@@ -12,16 +12,17 @@ class VCFRead():
         self.genome = pysam.FastaFile(ref)
         self.nux = nux
         self.RE_nu = RE_nu
+        self.outFile = outFile
+        self.mapTool = mapTool
+        self.svTool = svTool
+
         self.tmpFileName = 'tmp.%s.%s.%s.%s.%s.%s.vcf'%(str(self.RE_nu),str(self.nux),platform,depth,mapTool,svTool)
         self.writetmp()
         self.vcfIn = pysam.VariantFile(self.tmpFileName)
         #print('tmp.%s.vcf'%str(nux))
         #self.vcfHead = str(self.vcfIn.header).strip().split('\n')
         self.vcfHead = open("Head.info", "r").read().strip().split("\n")
-        self.outFile = outFile
         self.SvLines = []
-        self.mapTool = mapTool
-        self.svTool = svTool
         print(self.vcfFile)
         if svType=='BND':
             self.SVIDprefix = '-'.join([platform,depth,'TRA',mapTool,svTool])
@@ -30,18 +31,31 @@ class VCFRead():
 
     def writetmp(self):
         with open(self.tmpFileName,'w') as out:
-            with open(self.vcfFile, 'r') as inp:
-                for li in inp:
-                    if ("#" in li) and ("INFO\tFORMAT" in li):
-                        li = re.sub("INFO\tFORMAT.*","INFO\tFORMAT\tNUL",li)
-                        out.write(li)
-                    elif "#" in li:
-                        out.write(li)
-                    elif '=>' in li:
-                        li = li.replace("=>",'=')
-                        out.write(li)
-                    else:
-                        out.write(li)
+            if self.svTool == 'picky':
+                out.write(re.sub("INFO\tFORMAT.*","INFO\tFORMAT\tNUL",open('Head.picky.info','r').read()))
+                with open(self.vcfFile, 'r') as inp:
+                    for li in inp:
+                        if "#" in li:
+                            continue
+                        elif '=>' in li:
+                            li = li.replace("=>",'=')
+                            out.write(li)
+                        else:
+                            out.write(li)
+
+            else:
+                with open(self.vcfFile, 'r') as inp:
+                    for li in inp:
+                        if ("#" in li) and ("INFO\tFORMAT" in li):
+                            li = re.sub("INFO\tFORMAT.*","INFO\tFORMAT\tNUL",li)
+                            out.write(li)
+                        elif "#" in li:
+                            out.write(li)
+                        elif '=>' in li:
+                            li = li.replace("=>",'=')
+                            out.write(li)
+                        else:
+                            out.write(li)
     
     def getChrID(self,line):
         return str(line.chrom)
@@ -68,17 +82,19 @@ class VCFRead():
         return a_seq
 
     def getBSeq(self,line):
-        b_seq = str(line.alts[0]).upper()
+        b_seq = str(line.alts[0])#.upper()
         if ('[' in b_seq):
-            b_seq = re.sub('[A,T,C,G,N]','N',b_seq)
-            bb = b_seq.split('[')
-            bb[1] = 'P'
-            return '['.join(bb)
+            return b_seq
+            #b_seq = re.sub('[A,T,C,G,N]','N',b_seq)
+            #bb = b_seq.split('[')
+            #bb[1] = 'P'
+            #return '['.join(bb)
         elif (']' in b_seq):
-            b_seq = re.sub('[A,T,C,G,N]','N',b_seq)
-            bb = b_seq.split(']')
-            bb[1] = 'P'
-            return ']'.join(bb)
+            return b_seq
+            #b_seq = re.sub('[A,T,C,G,N]','N',b_seq)
+            #bb = b_seq.split(']')
+            #bb[1] = 'P'
+            #return ']'.join(bb)
         else:
             return b_seq
         
@@ -113,7 +129,7 @@ class VCFRead():
                 if str(line.info['SVTYPE']) in ["BND", "TRA"]:
                     svLEN = 'SVLEN=' + "NULL"
                     CHR2Pos = self.getCHR2Pos(line)
-                    svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                    svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                     svEND = 'END=' + CHR2Pos[1]
             except TypeError:
                 svL = str(line.info['SVLEN'])
@@ -121,7 +137,7 @@ class VCFRead():
                 if str(line.info['SVTYPE']) in ["BND", "TRA"]:
                     svLEN = 'SVLEN=' + "NULL"
                     CHR2Pos = self.getCHR2Pos(line)
-                    svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                    svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                     svEND = 'END=' + CHR2Pos[1]
             infos = ';'.join(['PRECISE', svEND, svTYPE, svLEN])
         except KeyError:
@@ -132,7 +148,7 @@ class VCFRead():
             elif str(line.info['SVTYPE']) in ["BND", "TRA"]:
                 svLEN = 'SVLEN=' + "NULL"
                 CHR2Pos = self.getCHR2Pos(line)
-                svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                 svEND = 'END=' + CHR2Pos[1]
             infos = ';'.join(['PRECISE', svEND, svTYPE, svLEN])
         return infos
@@ -162,6 +178,7 @@ class VCFRead():
             return str(line.info['SVTYPE'])
 
     def get_passinfo(self,line):
+        #print(line.filter.keys())
         passinfo = str(line.filter.keys()[0])
         return passinfo
 
@@ -173,11 +190,11 @@ class VCFRead():
     
     def run(self):
         IDnu = 1
-        chrsID = [str(i) for i in range(1, 23, 1)] + ['X', 'Y', 'MT']
+        chrsID = ["chr"+str(i) for i in range(1, 23, 1)] + ['chrX', 'chrY', 'chrMT']
         for line in self.vcfIn:
             passinfo = self.get_passinfo(line)
             line_SVTYPE = self.get_line_SVTYPE(line)
-            #print(passinfo,line_SVTYPE,self.svType,line.info['SVTYPE'])
+            #print('a',passinfo,line_SVTYPE,self.svType,line.info['SVTYPE'])
             if (line_SVTYPE != self.svType) or \
                     (str(line.chrom) not in chrsID) or \
                     (passinfo not in  ["PASS"]):
@@ -187,7 +204,8 @@ class VCFRead():
                 if (self.svType in ['TRA','BND']) and (self.getCHR2Pos(line)[0] not in chrsID):
                     continue
                 tmpSample, tmpGT = self.getSample(line)
-
+                if "NanoSV" in self.vcfFile and not tmpGT:
+                    continue
                 if self.svType == 'DUP':
                     if tmpGT == "None/None" :
                         if self.getRE(line)>=self.RE_nu:
@@ -235,6 +253,7 @@ class VCFRead():
                             IDnu+=1
  
                     elif tmpGT != "None/None" and self.getRE(line)>=self.RE_nu:
+                
                         self.SvLines.append('\t'.join([self.getChrID(line),
                                                        self.getPos(line),
                                                        self.SVIDprefix+'.'+str(IDnu),                       #self.getSVID(line),

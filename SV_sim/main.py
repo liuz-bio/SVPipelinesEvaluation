@@ -3,6 +3,7 @@ import os.path
 from pbsvRead import pbsvRead
 from cutesvRead import cutesvRead
 from snifflesRead import snifflesRead
+from sniffles2Read import sniffles2Read
 from debreakRead import debreakRead
 from dellyRead import dellyRead
 from nanosvRead import nanosvRead
@@ -10,13 +11,14 @@ from nanovarRead import nanovarRead
 from svimRead import svimRead
 from pickyRead import pickyRead
 from svisionRead import svisionRead
-from createSimulateSV import createSimulateSV
+from createSimulateSV_Sample import createSimulateSV
 from StaticTruvari import StaticTruvari
 from overlapVcf import overlapVcf
 #from EvaluationSV import EvaluationSV
 #from EvaluationSV_other import EvaluationSV
 from EvaluationSV_truvari import EvaluationSV
 import multiprocessing
+import traceback
 
 def error(msg, *args):
     return multiprocessing.get_logger().error(msg, *args)
@@ -41,53 +43,76 @@ class LogExceptions(object):
         return result
     pass
 
+
+def task_call_back(res):
+    print(f'complete! {res}')
+
+def task_err_call_back(err):
+    print(f'~ error：{str(err)}')
+    #print(err.__traceback__.tb_frame.f_globals['__file__'])
+    #print(err.__traceback__.tb_lineno)
+
+
 def funcSim(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux):
-    if svTool =='pbsv':
+    print(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux)
+    if svTool.lower() =='pbsv':
         SvToolVcf = pbsvRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                              outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "cutesv":
+    elif svTool.lower() == "cutesv":
         SvToolVcf = cutesvRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "sniffles":
+    elif svTool.lower() == "cutesv2":
+        SvToolVcf = cutesvRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
+                               outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
+    elif svTool.lower() == "sniffles":
         SvToolVcf = snifflesRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                 outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "debreak":
+    elif svTool.lower() == "sniffles2":
+        SvToolVcf = sniffles2Read(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
+                                outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
+    elif svTool.lower() == "debreak":
         SvToolVcf = debreakRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "delly":
+    elif svTool.lower() == "delly":
         SvToolVcf = dellyRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "nanosv":
-        SvToolVcf = nanosvRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
+    elif svTool.lower() == "nanosv":
+        try:
+            SvToolVcf = nanosvRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "nanovar":
+        except Exception as e:
+            print('ExceptionOOO: ',e)
+    elif svTool.lower() == "nanovar":
         SvToolVcf = nanovarRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "picky":
+    elif svTool.lower() == "picky":
         SvToolVcf = pickyRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    elif svTool == "svim":
+    elif svTool.lower() == "svim":
         SvToolVcf = svimRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
-                                   outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
+                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
     elif svTool == "svision":
         SvToolVcf = svisionRead(platform=platform, depth=depth, svType=svType, vcfFile=vcfFile,
                                    outFile=outFile, ref=ReferencePath, mapTool=mapTool,svTool=svTool,RE_nu=RE_nu,nux=nux)
-    try:
-        SvToolVcf.run()
-    except Exception as e:
-        print("Exception: ",e)
+    SvToolVcf.run()
+    #try:
+    #    SvToolVcf.run()
+    #except Exception as e:
+    #        print('ExceptionIII: ',vcfFile,e)
+
 
 def readInfo(InfoName):
     multiprocessing.log_to_stderr()
-    pool = multiprocessing.Pool(processes = 60)
+    pool = multiprocessing.Pool(processes = 80)
     nux=0
     for ix in open(InfoName, 'r'):
+        #print(ix)
         svTool, SvToolVcf = None, None
-        ReferencePath = "/home/lz/Data_sequence/2021_4_2/visortest/simulation_pipline/SV/data/hs37d5.fa"
+        ReferencePath = "/home/lz/Data_sequence/2023_11_14/Genome/hg38/genome.fa"
         ix = ix.strip().split('\t')
         if '#' in ix[0]:
             continue
-        elif ix[4].lower() in ["pbsv","nanosv", "cutesv", "delly", "debreak", "svim", "sniffles", "picky", "nanovar","svision"]:
+        elif ix[4].lower() in ["pbsv", "nanosv","cutesv","cutesv2", "delly", "debreak", "svim", "sniffles", "sniffles2", "picky", "nanovar","svision"]:
             #vcfFileName = ix[5].split('/')[-1]
             vcfFileName = ix[6]
             depth = ix[1]
@@ -102,10 +127,12 @@ def readInfo(InfoName):
             continue
 
         #msg = "hello %d" %(i)
-        for RE_nu in range(2,21):
+        for RE_nu in [2]:#range(2,21):
             outFile = os.path.join("CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu), vcfFileName)
-            pool.apply_async(func=LogExceptions(funcSim), args=(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux,))   
-        nux+=1
+            os.makedirs(os.path.join("CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu)), exist_ok=True) 
+            #print(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux,)
+            pool.apply_async(func=funcSim, args=(platform, depth, svType, vcfFile, outFile, ReferencePath, mapTool, svTool, RE_nu, nux,),callback=task_call_back, error_callback=task_err_call_back)
+            nux+=1
     print("Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~")
     pool.close()
     pool.join()  
@@ -116,35 +143,30 @@ def readSim(SimInfoName):
     for line in open(SimInfoName,'r'):
         lines = line.strip().split('\t')
         svType = lines[0].upper()
+        sample = lines[1]
         if svType == "TRA":
             svType = "BND"
-        depth = lines[1]
-        outFile  = os.path.join("SimOutPath", svType, "real_%s.vcf"%svType.lower())
+        outFile  = os.path.join("SimOutPath", svType, sample, "real_%s.vcf"%svType.lower())
         if outFile in Fil:
             continue
         Fil.append(outFile)
-        SimulateBedFile = lines[3]
-        ref = "/home/lz/Data_sequence/2021_4_2/visortest/simulation_pipline/SV/data/hs37d5.fa"
-        print(SimulateBedFile)
-        try:
-            sim = createSimulateSV(SimulateBedFile=SimulateBedFile,
+        callSVFile = lines[2]
+        ref = "/public3/SVDataset_lz/backup/2023_11_14/Genome/hg38/genome.fa"
+        sim = createSimulateSV(callSVFile=callSVFile,
                                svType=svType,
                                outFile=outFile,
-                               ref=ref, depth=depth)
-        #try:
-            sim.run()
-        except BaseException as e:
-            print(e)
+                               ref=ref)
+        sim.run()
 
-
-def funcEval(simOutFile,callOutFile,svType,EvalOutFile,RE_nu,nux):
+def funcEval(simOutFile,callOutFile,svType,EvalOutFile,sample,pwa_path,RE_nu,nux):
+    evalSV = EvaluationSV(VcfBaseFile=simOutFile, VcfCommFile=callOutFile, svType=svType, outFile=EvalOutFile,sample=sample,pwa_path=pwa_path,RE_nu=RE_nu,nux=nux)
+    print(simOutFile,callOutFile,svType,EvalOutFile,sample,pwa_path,RE_nu,nux)
     try:
-        evalSV = EvaluationSV(VcfBaseFile=simOutFile, VcfCommFile=callOutFile, svType=svType, outFile=EvalOutFile,RE_nu=RE_nu,nux=nux)
-        evalSV.base_comm()
-    except BaseException as e:
+        evalSV.run()
+    except Exception as e:
         print(e)
 
-def evaluationSV(InfoName):
+def evaluationSV(InfoName,pwa_path):
     multiprocessing.log_to_stderr()
     pool = multiprocessing.Pool(processes = 60)
     nux = 0
@@ -155,28 +177,48 @@ def evaluationSV(InfoName):
         depth = lines[1]
         platform = lines[0]
         svType = lines[2].upper()
-        if svType == "TRA":
+        if svType in ["TRA","BND"]:
+            #continue
             svType = "BND"
         mapTool = lines[3]
         svTool = lines[4]
+        #callOutFile = os.path.join("CallOutPath",platform, mapTool, svTool, svType,depth,  vcfFileName)
         for RE_nu in range(2,21):
-            callOutFile = os.path.join("CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu), vcfFileName)
-            simOutFile =os.path.join("SimOutPath", svType, "real_%s.vcf"%svType.lower())
-            EvalOutFile = os.path.join("EvalOutFile",platform, mapTool, svTool, svType, depth,str(RE_nu),'.'.join(vcfFileName.split('.')[:-1]))
-            os.makedirs(os.path.join("EvalOutFile",platform, mapTool, svTool, svType, depth,str(RE_nu)), exist_ok=True)
-            pool.apply_async(func=LogExceptions(funcEval), args=(simOutFile,callOutFile,svType,EvalOutFile,str(RE_nu),str(nux),))
+            callOutFile = os.path.join(pwa_path,"CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu), vcfFileName)
+            simOutFile =os.path.join(pwa_path,"SimOutPath", svType,sample, "real_%s.vcf"%svType.upper())
+            EvalOutFile = os.path.join(pwa_path,"EvalOutFile",platform, mapTool, svTool, svType, depth,str(RE_nu), '.'.join(vcfFileName.split('.')[:-1]))
+            os.makedirs(EvalOutFile, exist_ok=True)
+            #print(callOutFile)
+            #print(simOutFile)
+            #print(EvalOutFile)
+            #print("###########")
+            os.makedirs(os.path.join(pwa_path,"CallOutPath", platform, mapTool, svTool, svType, depth,str(RE_nu)), exist_ok=True)
+            pool.apply_async(func=LogExceptions(funcEval), args=(simOutFile,callOutFile,svType,EvalOutFile,sample,pwa_path,str(RE_nu),'.'.join([platform,mapTool,svTool,svType,depth,str(nux)]),))
             nux+=1
-
+        
     print("Mark~ Mark~ Mark~~~~~~~~~~~~~~~~~~~~~~")
     pool.close()
     pool.join()
     print("Sub-process(es) done.")
 
-
-
-
+        #evalSV = EvaluationSV(VcfBaseFile=simOutFile, VcfCommFile=callOutFile, svType=svType, outFile=EvalOutFile)
+        #evalSV.run()
 
 if __name__ == '__main__':
-    readInfo("vcf.all.info")
-    readSim("bed/Sim.info")
-    evaluationSV("vcf.all.info")
+    #readInfo("tt.info")#bed/vcf.info")
+    #readInfo("three.all.vcf.picky.info")    #readInfo("three.all.vcf.infoi")
+    ##readInfo("three.all.vcf.new.info")
+    #readInfo("three.all.vcf.info_noTRA.CLR.debreak.lra")
+    #readInfo("three.all.vcf.info_noTRA_lra_svim")
+    readInfo("three.all.vcf.info")
+    #readSim("/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_new/bed/real_merge_vcf.bed")
+    #evaluationSV("three.all.vcf.new.info","/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_sim")
+    #evaluationSV("three.all.vcf.info.INS","/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_sim")
+    #evaluationSV("three.all.vcf.info_noTRA_lra_svim","/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_sim")
+    #evaluationSV("three.all.vcf.info_noTRA.test", "/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_sim")
+    #evaluationSV("/home/lz/Data_sequence/2020_5_11/SV_work/three_static/vcf.info")#bed/vcf.info")
+    #readSim("bed/bed.info")
+    #evaluationSV("/home/lz/Data_sequence/2021_4_2/SV_static/SV_new2/three_static/three.all.DUP.vcf.info","/home/lz/Data_sequence/2021_4_2/SV_static/SV_new2/three_static")
+    #evaluationSV("/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/three.ngmlr.svim.vcf.info","/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static")
+    #evaluationSV("/home/lz/Data_sequence/2020_5_11/SV_work/three_static/Pacbio.HG003.25x.pbmm2.sniffles.svim.info","/home/lz/Data_sequence/2020_5_11/SV_work/three_static")
+

@@ -13,3 +13,11 @@ class cutesvRead(VCFRead):
         sample = ':'.join([GT, DR, DV])
         return sample, GT
 
+    def get_passinfo(self,line):
+        #print(line.filter.keys())
+        if self.svType.upper() == "DUP" or self.svType.upper() == "BND":
+            return "PASS"
+        else:
+            passinfo = str(line.filter.keys()[0])
+            return passinfo
+

@@ -15,3 +15,8 @@ class pickyRead(VCFRead):
         DV = '12'
         sample = ':'.join([GT, DR, DV])
         return sample, GT
+
+if __name__=="__main__":
+    SvToolVcf = pickyRead(platform='CCS', depth='25x',svType='DEL', vcfFile='tmp.9.3940.CCS.25x.winnowmap.picky.vcf',outFile='w/CHM13.25x.vcf', ref='/home/lz/Data_sequence/2023_11_14/Genome/hg38/genome.fa', mapTool='winnowmap', svTool='picky', RE_nu=2, nux=0)
+
+    SvToolVcf.run()

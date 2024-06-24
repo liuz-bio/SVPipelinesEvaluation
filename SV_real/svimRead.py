@@ -8,11 +8,14 @@ class svimRead(VCFRead):
     def chSVTYPE(self,line):
         if line.info['SVTYPE']=='TRA':
             return 'BND'
-        elif line.info['SVTYPE'] == "DUP:TANDEM" and self.svTool.lower() == "svim":
-            print("-----------------------------------",line.info['SVTYPE'],self.svTool.lower(),self.svType)
-            return "DUP"
+        elif self.svTool.lower() == "svim":
+            if line.info['SVTYPE'] == "DUP:INT" or line.info['SVTYPE'] == "DUP:TANDEM":
+                return "DUP"
+            else:
+                return str(line.info['SVTYPE'])
         else:
             return str(line.info['SVTYPE'])
+
 
     def getInfo(self,line):
         svTYPE = 'SVTYPE=' + self.svType
@@ -23,7 +26,7 @@ class svimRead(VCFRead):
                 if str(line.info['SVTYPE']) in ["BND", "TRA"]:
                     svLEN = 'SVLEN=' + "NULL"
                     CHR2Pos = self.getCHR2Pos(line)
-                    svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                    svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                     svEND = 'END=' + CHR2Pos[1]
             except TypeError:
                 svL = str(line.info['SVLEN'])
@@ -31,7 +34,7 @@ class svimRead(VCFRead):
                 if str(line.info['SVTYPE']) in ["BND", "TRA"]:
                     svLEN = 'SVLEN=' + "NULL"
                     CHR2Pos = self.getCHR2Pos(line)
-                    svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                    svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                     svEND = 'END=' + CHR2Pos[1]
             infos = ';'.join(['PRECISE', svEND, svTYPE, svLEN])
         except KeyError:
@@ -42,7 +45,7 @@ class svimRead(VCFRead):
             elif self.svType in ["BND", "TRA"]:
                 svLEN = 'SVLEN=' + "NULL"
                 CHR2Pos = self.getCHR2Pos(line)
-                svTYPE = "SVTYPE=" + "TRA;CHR2="+CHR2Pos[0]
+                svTYPE = "SVTYPE=" + "BND;CHR2="+CHR2Pos[0]
                 svEND = 'END=' + CHR2Pos[1]
             infos = ';'.join(['PRECISE', svEND, svTYPE, svLEN])
         return infos

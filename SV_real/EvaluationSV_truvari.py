@@ -13,7 +13,6 @@ class EvaluationSV():
          self.sample = sample
          self.nux = nux
          self.RE_nu = RE_nu
-         self.svType = svType
          self.pwa_path = pwa_path
          self.outFile = outFile
          self.vcfhead = "/home/lz/Data_sequence/2020_5_11/SV_work/three_static/Head.info"
@@ -28,32 +27,43 @@ class EvaluationSV():
          self.lsv_no_GT = []
          self.bc1_no_GT = []
          self.bc2_no_GT = []
-         bedDicts = {"DEL.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG003.bed",
-                     "DEL.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG004.bed",
-                     "DEL.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG005.bed",
-                     "DEL.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG006.bed",
-                     "DEL.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG007.bed",
-                     "DEL.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.NA12778.bed",
-                     "DUP.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG003.bed",
-                     "DUP.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG004.bed",
-                     "DUP.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG005.bed",
-                     "DUP.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG006.bed",
-                     "DUP.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG007.bed",
-                     "DUP.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.NA12778.bed",
-                     "INS.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG003.bed",
-                     "INS.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG004.bed",
-                     "INS.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG005.bed",
-                     "INS.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG006.bed",
-                     "INS.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG007.bed",
-                     "INS.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.NA12778.bed",
-                     "INV.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG003.bed",
-                     "INV.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG004.bed",
-                     "INV.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG005.bed",
-                     "INV.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG006.bed",
-                     "INV.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG007.bed",
-                     "INV.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.NA12778.bed"}
+          
+         mergeBed = "/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_new2/bed/merge/merge3/bed.tab"
+         #realBed = "/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_new/bed/real_bed/bed.tab"
+         realBed = "/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_new2/bed/bed_test/bed.tab"
+         bedDicts = self.dealBed(mergeBed, realBed)
+         
+         #bedDicts = {"DEL.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG003.bed",
+         #            "DEL.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG004.bed",
+         #            "DEL.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG005.bed",
+         #            "DEL.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG006.bed",
+         #            "DEL.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.HG007.bed",
+         #            "DEL.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DEL.NA12778.bed",
+         #            "DUP.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG003.bed",
+         #            "DUP.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG004.bed",
+         #            "DUP.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG005.bed",
+         #            "DUP.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG006.bed",
+         #            "DUP.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.HG007.bed",
+         #            "DUP.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/DUP.NA12778.bed",
+         #            "INS.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG003.bed",
+         #            "INS.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG004.bed",
+         #            "INS.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG005.bed",
+         #            "INS.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG006.bed",
+         #            "INS.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.HG007.bed",
+         #            "INS.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INS.NA12778.bed",
+         #            "INV.HG003":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG003.bed",
+         #            "INV.HG004":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG004.bed",
+         #            "INV.HG005":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG005.bed",
+         #            "INV.HG006":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG006.bed",
+         #            "INV.HG007":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.HG007.bed",
+         #            "INV.NA12778":"/home/lz/Data_sequence/2021_4_2/SV_static/SV_new/three_static/bed/bed/INV.NA12778.bed"}
                      #'DUP':"/home/lz/Data_sequence/2021_4_2/SV_static/SV_HG002/bed/DUP.bed"}
+         print(svType,sample)
          self.bed = bedDicts[svType+'.'+sample]
+         if svType == "DUP_INS":
+             self.svType = "INS"
+         else:
+             self.svType = svType
          self.lsv_base_GT_distr = {'50-100':0,'100-500':0,'500-1000':0,'1000-2500':0,'2500-99999999999':0}
          self.lsv_comm_GT_distr = {'50-100':0,'100-500':0,'500-1000':0,'1000-2500':0,'2500-99999999999':0}
          self.lsv_base_no_GT_distr = {'50-100':0,'100-500':0,'500-1000':0,'1000-2500':0,'2500-99999999999':0}
@@ -65,7 +75,16 @@ class EvaluationSV():
          self.vcfcomm = self.readvcf(pysam.VariantFile(VcfCommFile))
          self.vcfcomm_T = {}
          self.vcfbase_T = {}
-    
+
+    def dealBed(self,mergeBed, realBed):
+        bedinfo = open(mergeBed,'r').read().strip().split('\n')
+        bedDicts = dict(zip([i.split('\t')[0] for i in bedinfo],[i.split('\t')[1] for i in bedinfo]))
+        for i in open(realBed,'r'):
+            i = i.strip().split('\t')
+            bedDicts[i[0]] = i[1]
+        return bedDicts
+
+
     def getBedFile(self, VcfCommFile, outBed):
         out = open(outBed,'w')
         for i in open(VcfCommFile):
@@ -116,6 +135,69 @@ class EvaluationSV():
             vcfDict[lineID] = [chrID, start, end, svlen, CHR2]
             
         return vcfDict
+
+    def eval(self, call, ans, offect=1000):
+        tpcall = 0
+        for i in call["BND"]:
+            for j in ans["BND"]:
+                if i[0] == j[0] and i[2] == j[2] and abs(i[1]-j[1]) <= offect and abs(i[3]-j[3]) <= offect:
+                    tpcall += 1
+                    break
+        fp = len(call["BND"]) - tpcall
+        return fp, len(call["BND"])
+
+    def load_callset(self, path):
+        callset = dict()
+        file = open(path, 'r')
+        for line in file:
+            seq = line.strip('\n').split('\t')
+            if seq[0][0] == '#':
+                continue
+    
+            chr = seq[0]
+            pos = int(seq[1])
+            info = pase_info(seq[7])
+            if info['SVTYPE'] == "TRA":
+                info['SVTYPE'] = "BND"
+    
+            if info['SVTYPE'] == "BND":
+                if seq[4][0] == ']':
+                    form = ']]N'
+                    chr2 = seq[4].split(':')[0][1:]
+                    pos2 = int(seq[4].split(':')[1][:-2])
+                elif seq[4][0] == '[':
+                    form = '[[N'
+                    chr2 = seq[4].split(':')[0][1:]
+                    pos2 = int(seq[4].split(':')[1][:-2])
+                else:
+                    if seq[4][1] == ']':
+                        form = 'N]]'
+                        chr2 = seq[4].split(':')[0][2:]
+                        pos2 = int(seq[4].split(':')[1][:-1])
+                    else:
+                        form = 'N[['
+                        chr2 = seq[4].split(':')[0][2:]
+                        pos2 = int(seq[4].split(':')[1][:-1])
+                if info['SVTYPE'] not in callset:
+                    callset[info['SVTYPE']] = list()
+                if info['END'] == 0:
+                    info['CHR2'] = chr2
+                    info['END'] = pos2
+                try:
+                    if int(chr) <= int(info['CHR2']):
+                        if form == 'N[[':
+                            form = ']]N'
+                        if form == ']]N':
+                            form = 'N[['
+                        callset[info['SVTYPE']].append([chr, pos, info['CHR2'], info['END'], form, phase_GT(seq[9]), 0])
+                    else:
+                        callset[info['SVTYPE']].append([info['CHR2'], info['END'], chr, pos, form, phase_GT(seq[9]), 0])
+                except:
+                    callset[info['SVTYPE']].append([chr, pos, info['CHR2'], info['END'], form, phase_GT(seq[9]), 0])
+    
+        file.close()
+        return callset
+
 
     def writeReslut(self, precision_GT,recall_GT,F1_GT,precision_no_GT,recall_no_GT,F1_no_GT,
                          TP_GT_comm,TP_GT_base,TP_no_GT_comm,TP_no_GT_base, commSize, baseSize,
@@ -186,7 +268,10 @@ class EvaluationSV():
         return tmp_precision, tmp_recall, tmp_F1
 
     def sort_tabix(self, vcfFile, outFileGz):
-        os.system("cat %s |vcf-sort|bgzip > %s;tabix %s"%(vcfFile,outFileGz,outFileGz))
+        #os.system("cat %s |sed 's/contig=<ID=chr/contig=<ID=/g'|sed 's/^chr//g'|sed 's/###/##/g'|vcf-sort|bgzip > %s;tabix %s"%(vcfFile,outFileGz,outFileGz))
+        os.system("cat %s |sed 's/###/##/g'|vcf-sort|bgzip > %s;tabix %s"%(vcfFile,outFileGz,outFileGz))
+        print("cat %s |sed 's/###/##/g'|vcf-sort|bgzip > %s;tabix %s"%(vcfFile,outFileGz,outFileGz))
+
 
     def lsv_bc(self,gs):
         bc1Dict = dict(zip(self.tmpDict.keys(),[[] for i in self.tmpDict.keys()]))
@@ -225,7 +310,7 @@ class EvaluationSV():
         if os.path.exists(outFile):
             shutil.rmtree(outFile)
         try:
-            os.system("/home/lz/miniconda3/bin/truvari bench -b %s -c %s -o %s -r 1000 -p 0.00 --pctsim 0 --passonly --sizemax 500000 --reference /home/lz/Data_sequence/2021_4_2/visortest/simulation_pipline/Nanopore/vcf/TS/SV/data/hs37d5.fa --includebed  %s "%(baseFile,commFile,outFile,self.bed))
+            os.system("/home/lz/miniconda3/envs/truvari/bin/truvari bench -b %s -c %s -o %s -r 1000 -p 0.00 --pctsim 0 --passonly --sizemax 500000 --reference /public3/SVDataset_lz/backup/2023_11_14/Genome/hg38/hg38.no_alt_nochr.fa --includebed  %s "%(baseFile,commFile,outFile,self.bed))
         except BaseException as e:
             print('truvari bench',e)
         try:
@@ -249,6 +334,8 @@ class EvaluationSV():
             gs = os.popen("cat %s.vcf|grep -v \#|grep 'SUPP_VEC=11;'|cut -f 10-11|sed 's/\t/:/g'|cut -d\: -f 1,8,12,19"%(tabfile)).read().strip().split('\n')
         except BaseException as e:
             print('gsssss',len(gs),gs)
+
+        
         
         for path in [self.baseFile,self.baseFile+'.tbi',self.commFile,self.commFile+'.tbi',tabfile,tabfile+'.vcf']:
             os.remove(path)
@@ -292,10 +379,21 @@ class EvaluationSV():
         except BaseException as e:
             print('bbbbb',e)
 
+    def base_comm_BND(self):
+        pass
+        #vcfBaseFile vcfCommFile  
+        #self.base_comm()
     def run(self):
-        self.base_comm()
-
+        if self.svType in ["TRA","BND"]:
+            self.base_comm_BND()
+        else:
+            self.base_comm()
+ 
 if __name__ == '__main__':
-    evalsv = EvaluationSV(VcfBaseFile=sys.argv[1], VcfCommFile=sys.argv[2], svType=sys.argv[3], outFile="tet", nux=1)
-    evalsv.base_comm()
+    pwa_path = "/public3/SVDataset_lz/backup/2023_11_14/SV_static/SV_new"
+    evalsv = EvaluationSV(VcfBaseFile=sys.argv[1], VcfCommFile=sys.argv[2], svType=sys.argv[3],sample=sys.argv[4], outFile="tet", nux=1, RE_nu=2, pwa_path=pwa_path)
+    if sys.argv[3] in ["TRA","BND"]:
+        evalsv.base_comm_BND() 
+    else:
+        evalsv.base_comm()
     

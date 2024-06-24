@@ -1,0 +1,5 @@
+CCS	25x	TRA	lra	picky	/home/lz/Data_sequence/2023_11_14/working/Pipelines/CCS/HG005/lra/vcf/picky/HG005.vcf	HG005.25x.vcf
+CCS	25x	DEL	lra	picky	/home/lz/Data_sequence/2023_11_14/working/Pipelines/CCS/HG005/lra/vcf/picky/HG005.vcf	HG005.25x.vcf
+CCS	25x	INS	lra	picky	/home/lz/Data_sequence/2023_11_14/working/Pipelines/CCS/HG005/lra/vcf/picky/HG005.vcf	HG005.25x.vcf
+CCS	25x	DUP	lra	picky	/home/lz/Data_sequence/2023_11_14/working/Pipelines/CCS/HG005/lra/vcf/picky/HG005.vcf	HG005.25x.vcf
+CCS	25x	INV	lra	picky	/home/lz/Data_sequence/2023_11_14/working/Pipelines/CCS/HG005/lra/vcf/picky/HG005.vcf	HG005.25x.vcf

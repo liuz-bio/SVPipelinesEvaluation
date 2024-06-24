@@ -10,7 +10,21 @@ class svisionRead(VCFRead):
         DR = '5' #str(line.samples.values()[0]['DR'])
         DV = '5' #str(line.samples.values()[0]['DV'])
         sample = ':'.join([GT, DR, DV])
-        return sample, GT
+        if GT == "0/0":
+            return sample, "None/None"
+        else:
+            return sample, GT
+  
+    def chSVTYPE(self,line):
+        if line.info['SVTYPE']=='TRA':
+            return 'BND'
+        elif self.svTool.lower() == "svision":
+            if "DUP" in line.info['SVTYPE']:
+                return "DUP"
+            else:
+                return str(line.info['SVTYPE'])
+        else:
+            return str(line.info['SVTYPE'])
 
     def getRE(self,line):
         tmp = [i for i in str(line).split('\t')[7].split(';') if 'SUPPORT=' in i]

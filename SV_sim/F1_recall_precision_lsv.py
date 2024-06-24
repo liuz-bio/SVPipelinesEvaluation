@@ -1,10 +1,10 @@
 import os
 import sys
 
-samples = ["HG002"]
+samples = ['Sim.DEL.INS.DUP.INV.25x','Sim.TRA.25x']
 #resultDict = {plat:{pipline:{svtype:{depth:{RE:{}}}}}}
 resultDict = {}
-for line in os.popen("cat vcf.all.info|cut -f 1,2,3,4,5|grep -v TRA").read().strip().split("\n"):
+for line in os.popen("cat three.all.vcf.new.DUP_INS.info three.all.vcf.new.info|cut -f 1,2,3,4,5|grep -v TRA|sort -u").read().strip().split("\n"):
     line = line.strip().split('\t')
     #print(line) Nanopore        HG003.10        DEL     minimap2        cutesv
     plat = line[0]
@@ -15,7 +15,8 @@ for line in os.popen("cat vcf.all.info|cut -f 1,2,3,4,5|grep -v TRA").read().str
     pipline = maps+'-'+call
     for sa in samples:
         #sams = sa+'.'+depth+'x' EvalOutFile/Nanopore/minimap2/cutesv/DEL/HG004.25/2/HG004.25x/
-        sams = plat.lower()+'_'+svtype.lower()+'_'+depth+'x'
+        #sams = depth+'x'
+        sams = sa+'.'+depth
         F1Dict = dict(zip(range(2,21),["0" for i in range(2,21)]))
         RecallDict = F1Dict.copy()
         precisionDict = F1Dict.copy()
@@ -23,6 +24,15 @@ for line in os.popen("cat vcf.all.info|cut -f 1,2,3,4,5|grep -v TRA").read().str
         #ID,baseT,commT,baseAll,commAll,precision,recall,F1
         #50-100,2460,2342,2949,3260,0.7184049079754601,0.8341810783316378,0.7719762848550846
         #print(path)
+        if (maps == 'lra') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','sniffles2','svim','svision']):
+            continue
+        if (maps == 'pbmm2') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','nanosv','pbsv','picky','sniffles','sniffles2','svim','svision']):
+            continue
+        if (svtype == 'BND') and (sa not in ['Sim.TRA.25x']):
+            continue
+        if (svtype in ['DEL','INS','INV','DUP','DUP_INS']) and (sa not in ['Sim.DEL.INS.DUP.INV.25x']):
+            continue
+
         if os.path.exists(path) :
             lsvName = []
             dataDict = {}

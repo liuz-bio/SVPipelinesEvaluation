@@ -19,7 +19,36 @@ class pbsvRead(VCFRead):
         AD = [int(i) for i in line.samples.values()[0]['AD']]
         GT = '/'.join([str(ix) for ix in line.samples.values()[0]['GT']])
         if GT == '1/1':
-            return AD[-1]
+            return max(AD)
         elif GT == '0/1':
-            return AD[-1]
+            return abs(AD[1])
+            #return abs(AD[0]-AD[1])
         return 1
+
+    def get_passinfo(self,line):
+        #print(line.filter.keys())
+        if self.svType.upper() == "DUP" or self.svType.upper() == "BND":
+            return "PASS"
+        else:
+            passinfo = str(line.filter.keys()[0])
+            return passinfo
+
+    def writetmp(self):
+        with open(self.tmpFileName,'w') as out:
+            for hl in open("Head.pbsv.info",'r'):
+                out.write(hl)
+            with open(self.vcfFile, 'r') as inp:
+                for li in inp:
+                    if "#" in li:
+                        continue
+                    elif '=>' in li:
+                        li = li.replace("=>",'=')
+                        out.write(li)
+                    else:
+                        out.write(li)
+
+
+if __name__=="__main__":
+    SvToolVcf = pbsvRead(platform='CLR', depth='25x',svType='DEL', vcfFile='/home/lz/Data_sequence/2023_11_14/working/Pipelines/CLR/HG007/ngmlr/vcf/pbsv/HG007.vcf',outFile='CallOutPath/CLR/ngmlr/pbsv/DEL/25x/2/HG007.25x.vcf', ref='/home/lz/Data_sequence/2023_11_14/Genome/hg38/genome.fa', mapTool='ngmlr', svTool='pbsv', RE_nu=2, nux=0)
+
+    SvToolVcf.run()

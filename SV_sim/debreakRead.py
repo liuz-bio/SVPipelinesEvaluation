@@ -34,7 +34,7 @@ class debreakRead(VCFRead):
     def OutPut(self):
         os.makedirs('/'.join(self.outFile.split('/')[:-1]), exist_ok=True)
         out = open(self.outFile, "w")
-        self.newHead()
+        #self.newHead()
         for line in self.vcfHead + self.SvLines:
             out.write(line + '\n')
         out.close()

@@ -8,6 +8,8 @@ class createSimulateSV():
         self.svType = svType
         self.outFile = outFile
         self.depth = depth
+        print('self.svType',self.svType)
+        print('SimulateBedFile',SimulateBedFile)
         #self.callSVFile = callSVFile
         #self.vcfHead = str(pysam.VariantFile(callSVFile).header).strip().split('\n')
         self.vcfHead = open("Head.info", "r").read().strip().split("\n")

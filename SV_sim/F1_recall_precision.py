@@ -1,26 +1,41 @@
 import os
 import sys
 
-samples = ["HG002"]
+samples = ['Sim.DEL.INS.DUP.INV.25x','Sim.TRA.25x']
 #resultDict = {plat:{pipline:{svtype:{depth:{RE:{}}}}}}
 resultDict = {}
-for line in os.popen("cat vcf.all.info|cut -f 1,2,3,4,5|grep -v TRA").read().strip().split("\n"):
+for line in os.popen("cat three.all.vcf.new.DUP_INS.info three.all.vcf.new.info|cut -f 1,2,3,4,5|sort -u").read().strip().split("\n"):
     line = line.strip().split('\t')
-    #print(line)
+    #print(line) Nanopore        HG003.10        DEL     minimap2        cutesv
     plat = line[0]
     call = line[4]
     maps = line[3]
     svtype = line[2]
+    if svtype == "TRA":
+        svtype = 'BND'
     depth = line[1]
     pipline = maps+'-'+call
-    for sa in [plat]:
-        sams = sa.lower()+'_'+svtype.lower()+'_'+depth+'x' #EvalOutFile/Nanopore/minimap2/pbsv/DEL/15/11/nanopore_del_15x/summary.txt
+    for sa in samples:
+        #sams = sa+'.'+depth+'x' EvalOutFile/Nanopore/minimap2/cutesv/DEL/HG004.25/2/HG004.25x/
+        #sams = depth+'x'
+        sams = sa+'.'+depth
         F1Dict = dict(zip(range(2,21),["0" for i in range(2,21)]))
         RecallDict = F1Dict.copy()
         precisionDict = F1Dict.copy()
+
+        if (maps == 'lra') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','sniffles2','svim','svision']):
+            continue
+        if (maps == 'pbmm2') and (call.lower() not in ['cutesv','cutesv2','debreak','delly','nanosv','pbsv','picky','sniffles','sniffles2','svim','svision']):
+            continue
+        if (svtype == 'BND') and (sa not in ['Sim.TRA.25x']):
+            continue
+        if (svtype in ['DEL','INS','INV','DUP','DUP_INS']) and (sa not in ['Sim.DEL.INS.DUP.INV.25x']):
+            continue
+    
+
         for idx in range(2,21):
-            #EvalOutFile/Nanopore/lordfast/cutesv/DEL/15/2/nanopore_del_15x/summary.txt
             path = "/".join(["EvalOutFile",plat,maps,call,svtype,depth,str(idx),sams,"summary.txt"])
+            print(path) 
             if os.path.exists(path) :
                 for lx in open(path,'r'):
                     lx = lx.strip().split(',')
@@ -30,6 +45,8 @@ for line in os.popen("cat vcf.all.info|cut -f 1,2,3,4,5|grep -v TRA").read().str
                         RecallDict[idx] = lx[1]
                     elif lx[0] == "precision_no_GT":
                         precisionDict[idx] = lx[1]
+            else:
+                print(path)
         #for ID in ["F1","recall","precision"]:
         print('\t'.join([plat,pipline,svtype,depth,sa,"F1",','.join([F1Dict[i] for i in range(2,21)])]))
         print('\t'.join([plat,pipline,svtype,depth,sa,"recall",','.join([RecallDict[i] for i in range(2,21)])]))
